@@ -1,13 +1,17 @@
 <?php
 require_once('../backend/database.php');
-
+$id = $_POST['id'];
 $produit = $_POST['produit'];
 $qte = $_POST['qte'];
 $user = $_POST['user'];
 $qte_stock = $_POST['qte_stock'];
 $emplacement = $_POST['emplacement'];
 
-$query = mysqli_query($conn, "SELECT '$produit' IN (SELECT produit FROM sortie WHERE statut = 'selection' AND user = '$user' AND emplacement = '$emplacement') as exist");
+if($id != ''){
+    mysqli_query($conn, "UPDATE sortie SET quantite = '$qte', emplacement = '$emplacement' WHERE id = '$id'");
+    echo "Expedition est mise ajour avec success!";
+}else{
+    $query = mysqli_query($conn, "SELECT '$produit' IN (SELECT produit FROM sortie WHERE statut = 'selection' AND user = '$user' AND emplacement = '$emplacement') as exist");
 $result = mysqli_fetch_assoc($query);
 if($result['exist'] == 1){
     $result = mysqli_query($conn, "SELECT quantite FROM sortie WHERE statut = 'selection' AND user = '$user' AND emplacement = '$emplacement'");
@@ -18,9 +22,11 @@ if($result['exist'] == 1){
         mysqli_query($conn, "UPDATE sortie set quantite = quantite + '$qte' WHERE statut = 'selection' AND user = '$user' AND emplacement = '$emplacement'");
         echo "Quantite mettre ajour avec success!";
     }
-}else{
+}
+else{
     mysqli_query($conn, "INSERT INTO sortie ( produit, quantite, statut, user, emplacement ) VALUES ('$produit', '$qte', 'selection', '$user', '$emplacement') ");
     echo "Expedition est ajoute avec success!";
+}
 }
 
 mysqli_close($conn);

@@ -48,6 +48,7 @@ if(!isset($_SESSION['id'])){
                         <div class="col-sm-6">
                             <a href="list_fornisseur.php" class="btn btn-info">Liste des Fornisseurs</a>
                             <div class="form-group">
+                                <input type="hidden" id="id" value=''>
                                 <label for="ice">ICE</label>
                                 <input type="text" placeholder="ice contient 15 nombre" class="form-control" id="ice">
                                 <label for="nom">Nom</label>
@@ -58,7 +59,7 @@ if(!isset($_SESSION['id'])){
                                 <input type="tel" placeholder="entrer le telephone" id="phone" class="form-control">
                                 <label for="adresse">Adresse</label>
                                 <input type="text" placeholder="entrer adresse" class="form-control" id="adresse">
-                                <button class="btn btn-primary mt-2" onclick="ajoterFornisseur()">Ajouter</button>
+                                <button id="submit" class="btn btn-primary mt-2" onclick="ajoterFornisseur()">Ajouter</button>
                             </div>
                         </div>
                     </div>
@@ -79,7 +80,36 @@ if(!isset($_SESSION['id'])){
     <!-- Custom Script -->
     <script src="../build/js/custom.js"></script>
     <script>
+        <?php
+        $id = '';
+        $ice = '';
+        $nom = '';
+        $email = '';
+        $phone = '';
+        $adresse = '';
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+            $result = mysqli_query($conn, "SELECT * FROM fornisseur WHERE id ='$id'");
+                $row = mysqli_fetch_assoc($result);
+                    $ice = $row['ice'];
+                    $nom = $row['nom'];
+                    $email = $row['email'];
+                    $phone = $row['phone'];
+                    $adresse = $row['adresse'];
+        }
+        ?>
+        const id = '<?php echo $id ?>';
+        if(id != ''){
+            $("#id").val('<?php echo $id ?>')
+            $("#ice").val('<?php echo $ice ?>')
+            $("#nom").val('<?php echo $nom ?>')
+            $("#email").val('<?php echo $email ?>')
+            $("#phone").val("<?php echo $phone ?>")
+            $("#adresse").val('<?php echo $adresse ?>')
+            $("#submit").text("Modifier")
+        }
         function ajoterFornisseur(){
+            let id = $("#id").val()
             let ice = $("#ice").val()
             let nom = $("#nom").val()
             let email = $("#email").val()
@@ -91,6 +121,7 @@ if(!isset($_SESSION['id'])){
                         url : "request/ajouter_fornisseur.php",
                         method : 'post',
                         data : {
+                            id : id,
                             ice : ice,
                             nom : nom,
                             email : email,
@@ -100,7 +131,7 @@ if(!isset($_SESSION['id'])){
                         cach : false,
                         success : function(msg){
                             alert(msg)
-                            location.reload()
+                            window.location = 'list_fornisseur.php'
                         },
                         error : function(){
                             console.log("Il ya un error")

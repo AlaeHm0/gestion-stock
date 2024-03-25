@@ -90,11 +90,12 @@ if(!isset($_SESSION['id'])){
                 </div>
                 </div>
                 <div class="col-sm-12 row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-5">
                   <h2 class="text-center">Produits les Plus Entree</h2>
                   <canvas id="entree_chart"></canvas>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-md-2"></div>
+                <div class="col-sm-12 col-md-5">
                   <h2 class="text-center">Produits les Plus Sortie</h2>
                   <canvas id="vente_chart"></canvas>
                 </div>
@@ -111,7 +112,7 @@ if(!isset($_SESSION['id'])){
                               <th>Produit</th>
                               <th>Fornisseur/Client</th>
                               <th>Quantite</th>
-                              <th>Date Reception/livraison</th>
+                              <th>Date Reception/Livraison</th>
                               <th>Type Transaction</th>
                             </tr>
                           </thead>
@@ -217,7 +218,7 @@ if(!isset($_SESSION['id'])){
       }
       ?>
       const ctx = $("#vente_chart");
-        const barColors = ["red", "green","blue", "yellow", "purple"];
+        const barColors = ["#023e8a", "#0077b6","#0096c7", "#00b4d8", "#48cae4"];
         new Chart(ctx, {
             type : 'doughnut',
             data : {

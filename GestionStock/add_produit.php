@@ -5,6 +5,8 @@ if(!isset($_SESSION['id'])){
   header("Location: login.php");
   exit();
 }
+$id = '';
+
                     ?>
 
 <!DOCTYPE html>
@@ -53,6 +55,7 @@ if(!isset($_SESSION['id'])){
                         <div class="col-sm-6">
                             <a href="list_produits.php" class="btn btn-info">Liste Produits</a><br>
                             <div class="form-group">
+                            <input type="hidden" id='id' value=''>
                             <label for="code">Code Produit</label>
                             <input type="text" class="form-control" id="code">
                             <label for="nom">Nom Produit</label>
@@ -70,8 +73,8 @@ if(!isset($_SESSION['id'])){
                                 ?>
                             </select>
                             <label for="description">Description Produit</label>
-                            <textarea id="description" cols="15" rows="1" class="form-control"></textarea>
-                            <button class="btn btn-primary mt-2" onclick="ajouterProduit()">Ajouter</button>
+                            <textarea id="description" cols="15" rows="4" class="form-control"></textarea>
+                            <button class="btn btn-primary mt-2" id="submit" onclick="ajouterProduit()">Ajouter</button>
                             </div>
                         </div>
                         
@@ -107,7 +110,32 @@ if(!isset($_SESSION['id'])){
     <!-- Custom Script -->
     <script src="../build/js/custom.js"></script>
     <script>
+        <?php
+        $code = '';
+        $nom = '';
+        $categorie = '';
+        $description = '';
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+            $result = mysqli_query($conn, "SELECT * FROM produit WHERE id ='$id'");
+                $row = mysqli_fetch_assoc($result);
+                    $code = $row['code'];
+                    $nom = $row['nom'];
+                    $categorie = $row['categorie'];
+                    $description = $row['description'];
+        }
+        ?>
+        const id = '<?php echo $id ?>';
+        if(id != ''){
+            $("#id").val('<?php echo $id ?>')
+            $("#code").val('<?php echo $code ?>')
+            $("#nom").val('<?php echo $nom ?>')
+            $("#categorie").val('<?php echo $categorie ?>')
+            $("#description").val("<?php echo $description ?>")
+            $("#submit").text("Modifier")
+        }
         function ajouterProduit(){
+            let id = $("#id").val();
             let code = $("#code").val()
             let nom = $("#nom").val()
             let categorie = $("#categorie").val()
@@ -117,15 +145,17 @@ if(!isset($_SESSION['id'])){
                     url : "request/ajouter_produit.php",
                     method : 'post',
                     data : {
+                        id : id,
                         code : code,
                         nom : nom,
                         categorie : categorie,
-                        decription : description
+                        description : description,
+                        
                     },
                     cach : false,
                     success : function(msg){
                         alert(msg)
-                        location.reload()
+                        window.location = 'list_produits.php'
                     },
                     error : function(){
                         console.error("Il ya un error")

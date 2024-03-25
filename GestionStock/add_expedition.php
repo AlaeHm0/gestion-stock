@@ -11,7 +11,7 @@ if(!isset($_SESSION['id'])){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -41,7 +41,7 @@ if(!isset($_SESSION['id'])){
         <!-- Heaader and Navigation -->
         <?php require('header.php'); ?>
         <!-- Content Page  -->
-        <div class="right_col">
+        <div class="right_col" role="main">
             <div>
                 <div class="page-title">
                     <div class="title_left">
@@ -58,7 +58,7 @@ if(!isset($_SESSION['id'])){
                         <div class="col-sm-12">
                             <a href="list_expeditions.php" class="btn btn-info">Liste des Expeditions</a>
                             <div class="card-box table-responsive">
-                                <table id="" class="table table-striped table-bordered">
+                                <table id="datatable" class="table table-striped table-bordered">
                                     <thead class="table-primary">
                                         <tr>
                                             <th>Code Produit</th>
@@ -73,6 +73,7 @@ if(!isset($_SESSION['id'])){
                                     <tbody>
                                         <tr>
                                             <td>
+                                                <input type="hidden" value="" id="id">
                                                 <select id="code_produit" class="form-select" onchange="changeCode(this.value)">
                                                     <option value=""></option>
                                                     <?php
@@ -113,11 +114,12 @@ if(!isset($_SESSION['id'])){
                                                 <td><?php echo $row['code'] ?></td>
                                                 <td><?php echo $row['nom'] ?></td>
                                                 <td><?php echo $row['categorie'] ?></td>
-                                                <td colspan='2'><?php echo $row['emplacement'] ?></td>
+                                                <td><?php echo $row['emplacement'] ?></td>
+                                                <td></td>
                                                 <td><?php echo $row['quantite'] ?></td>
                                                 <td class="text-center">
                                                     <a title="Supprimer" class="btn btn-danger" onclick="supprimerSelectExpedition(<?php echo $row['id'] ?>)"><i class="fa fa-trash-can fa-pull-left"></i></a>
-                                                    <a title="Editer" class="btn btn-warning"><i class="fa fa-pen-to-square fa-pull-right"></i></a>
+                                                    <a title="Editer" class="btn btn-warning" onclick="editerExpedition(<?= $row['id']?>)"><i class="fa fa-pen-to-square fa-pull-right"></i></a>
                                                 </td>
                                             </tr>
                                             <?php
@@ -205,6 +207,7 @@ if(!isset($_SESSION['id'])){
     <script src="../build/js/custom.js"></script>
     <script>
         function ajouterExpedition(){
+            let id = $("#id").val()
             let code_produit = $("#code_produit").val()
             let qte_stock = $("#qte_stock").text();
             let qte = $("#qte").val()
@@ -217,6 +220,7 @@ if(!isset($_SESSION['id'])){
                     url : "request/ajouter_expedition.php",
                     method : 'post',
                     data : {
+                        id : id,
                         produit : code_produit,
                         qte : qte,
                         qte_stock : qte_stock,
@@ -255,9 +259,12 @@ if(!isset($_SESSION['id'])){
                     let data = JSON.parse(reponse)
                     $("#nom_produit").text(data.nom);
                     $("#categorie").text(data.categorie);
-                    $("#qte").val(0) // reset the quantite
-                    $("#emplacement").val('');
+                    
                     $("#qte_stock").text('');
+                    if( $("#id").val() == ''){
+                        $("#emplacement").val('');
+                        $("qte").val(0); // reset the quantite if not in edit mode
+                    }
                 }
             })
             }
@@ -334,6 +341,30 @@ if(!isset($_SESSION['id'])){
                 alert("Entrer tout les champs!")
             }
         }
+        function editerExpedition(id){
+        $.ajax({
+            url : 'request/editer_expedition.php',
+            method : 'GET',
+            data : {
+                id : id
+            },
+            cach : false,
+            success : function(reponse){
+                console.log(reponse)
+                let data = JSON.parse(reponse);
+                $("#code_produit").val(data.produit).prop('disabled', true);
+                $("#emplacement").val(data.emplacement)
+                $("#id").val(id);
+                changeCode(data.produit);
+                changeEmplacement(data.emplacement)
+                $("#qte").val(data.quantite);
+
+            },
+            error : function(xhr, status, error){
+                console.error(status + " : " + error)
+            }
+        })
+    }
     </script>
   </body>
 </html>

@@ -28,6 +28,11 @@ if(!isset($_SESSION['id'])){
     <!-- Build -->
     <link rel="stylesheet" href="../build/css/custom.min.css" >
     <title>Categories</title>
+    <style>
+      th, td {
+        width : 25%;
+      }
+    </style>
 </head>
 
   <body class="nav-md">

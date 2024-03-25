@@ -13,18 +13,20 @@
             <div class="row">
                 <div class="col-sm-4">
                     <h4>Ajouter Categorie</h4>
+                    <input type="hidden" value="" id="id">
                     <label for="categorie">Categorie</label>
                     <input id="categorie" type="text" class="form-control" placeholder="entrer ici un categorie">
-                    <button class="btn btn-primary mt-2" onclick="ajouterCategorie()">Ajouter</button>
+                    <button class="btn btn-primary mt-2" onclick="ajouterCategorie()" id="submit">Ajouter</button>
                 </div>
                 <div class="col-sm-8">
                     <h4>Liste des Categories</h4>
                     <table class="table table-striped table-bordered">
                         <thead class="table-info">
                             <tr>
-                                <th style="width:33%">#</th>
-                                <th style="width:33%">Categorie</th>
-                                <th style="width:33%">Supprimer</th>
+                                <th>#</th>
+                                <th>Categorie</th>
+                                <th>Editer</th>
+                                <th>Supprimer</th>                                
                             </tr>
                         </thead>
                         <tbody>
@@ -35,7 +37,9 @@
                                 <tr>
                                     <td><?php echo $row['id'] ?></td>
                                     <td><?php echo $row['nom'] ?></td>
-                                    <td><a class="btn btn-danger" style="cursor : pointer;" onclick="supprimerCategorie(<?php echo $row['id'] ?>)"><i class="fa fa-trash-can"></i></a></td>
+                                    <td><a class="btn btn-warning" onclick="editerCategorie(<?php echo $row['id'] ?>)"><i class="fa fa-pen-to-square"></i></a></td>
+                                    <td><a class="btn btn-danger" onclick="supprimerCategorie(<?php echo $row['id'] ?>)"><i class="fa fa-trash-can"></i></a></td>
+                                    
                                 </tr>
                                 <?php
                             }
@@ -50,11 +54,13 @@
 <script>
     function ajouterCategorie(){
         let categorie = $('#categorie').val()
+        let id = $("#id").val()
         if(categorie){
             $.ajax({
                 url : "request/ajouter_categorie.php",
                 method : "POST",
                 data : {
+                    id : id,
                     nom : categorie
                 },
                 cach : false,
@@ -90,5 +96,24 @@
 
             })
         }
+    }
+    function editerCategorie(id){
+        $.ajax({
+            url : 'request/editer_categorie.php',
+            method : 'GET',
+            data : {
+                id : id
+            },
+            cach : false,
+            success : function(reponse){
+                let data = JSON.parse(reponse);
+                $("#categorie").val(data.nom);
+                $("#id").val(data.id)
+                $("#submit").text('Modifier')
+            },
+            error : function(xhr, status, error){
+                console.error(status + " : " + error)
+            }
+        })
     }
 </script>

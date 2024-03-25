@@ -13,11 +13,12 @@
             <div class="row">
                 <div class="col-sm-4">
                     <h4>Ajouter Emplacement</h4>
+                    <input type="hidden" id="id">
                     <label for="nom">Nom</label>
                     <input type="text" class="form-control" id="nom">
                     <label for="capacity_max">Capacity Maximal</label>
                     <input type="number" class="form-control" min="0" id="capacity_max">
-                    <button class="btn btn-primary mt-2" onclick="ajouterEmplacement()">Ajouter</button>
+                    <button id="submit" class="btn btn-primary mt-2" onclick="ajouterEmplacement()">Ajouter</button>
                 </div>
                 <div class="col-sm-8">
                     <h4>Liste des Emplacements</h4>
@@ -41,7 +42,7 @@
                                         <td><?php echo $row['nom'] ?></td>
                                         <td><?php echo $row['capacity_max'] ?></td>
                                         <td><?php echo $row['capacity_actuelle'] ?></td>
-                                        <td><a class="btn btn-warning" ><i class="fa fa-pen-to-square"></i></a></td>
+                                        <td><a class="btn btn-warning" onclick="editerEmplacement(<?php echo $row['id'] ?>)"><i class="fa fa-pen-to-square"></i></a></td>
                                         <td><a class="btn btn-danger" onclick="supprimerEmplacement(<?php echo $row['id'] ?>)"><i class="fa fa-trash-can"></i></a></td>
                                     </tr>
                                     <?php
@@ -59,11 +60,13 @@
     function ajouterEmplacement(){
         let nom = $("#nom").val();
         let cap_max = $("#capacity_max").val();
+        let id = $("#id").val();
         if(nom && cap_max){
             $.ajax({
                 url : "request/ajouter_emplacement.php",
                 method : 'post',
                 data : {
+                    id : id,
                     nom : nom,
                     capacity_max : cap_max
                 },
@@ -102,5 +105,25 @@
                 console.error(msg)
             })
         }
+    }
+    function editerEmplacement(id){
+        $.ajax({
+            url : 'request/editer_emplacement.php',
+            method : 'GET',
+            data : {
+                id : id
+            },
+            cach : false,
+            success : function(reponse){
+                let data = JSON.parse(reponse);
+                $("#nom").val(data.nom);
+                $("#capacity_max").val(data.capacity_max);
+                $("#id").val(data.id);
+                $("#submit").text('Modifier')
+            },
+            error : function(xhr, status, error){
+                console.error(status + " : " + error)
+            }
+        })
     }
 </script>

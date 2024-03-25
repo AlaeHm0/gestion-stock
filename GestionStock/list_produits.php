@@ -75,7 +75,7 @@ if(!isset($_SESSION['id'])){
                                                 <td><?php echo $row['categorie'] ?></td>
                                                 <td><?php echo $row['description'] ?></td>
                                                 <td>
-                                                    <a class="btn btn-warning" title="Editer"><i class="fa fa-pen-to-square fa-pull-right"></i></a>
+                                                    <a class="btn btn-warning" href="add_produit.php?id=<?= $row['id'] ?>" title="Editer"><i class="fa fa-pen-to-square fa-pull-right"></i></a>
                                                     <a class="btn btn-danger" onclick="supprimerProduit(<?php echo $row['id'] ?>)" title="Supprimer"><i class="fa fa-trash-can fa-pull-left"></i></a>
                                                 </td>
                                             </tr>

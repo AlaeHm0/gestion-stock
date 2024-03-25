@@ -1,6 +1,9 @@
 <?php 
 include 'backend/database.php';
 
+if(isset($_GET['msg'])){
+    $msg = $_GET['msg'];
+}
                     ?>
 
 <!DOCTYPE html>
@@ -56,6 +59,16 @@ include 'backend/database.php';
                 </form>
             </div>
         </div>
+        <?php 
+        if(isset($_GET['msg'])){
+            ?>
+            <div class="error" style="color : red; background-color:#f7ede2;padding:10px 10px; margin-top : 20px; font-size:20px; border-radius:30px">
+                <?= $_GET['msg'] ?>
+            </div>
+            <?php
+        }
+        ?>
+
         
     </div>
 
@@ -68,6 +81,7 @@ include 'backend/database.php';
     <!-- Custom Script -->
     <script src="../build/js/custom.js"></script>
     <script>
+        
         function loogin(){
             let login = $("#login").val()
             let psw = $("#pw").val()

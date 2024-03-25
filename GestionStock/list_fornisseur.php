@@ -77,8 +77,8 @@ if(!isset($_SESSION['id'])){
                                                 <td><?php echo $row['phone'] ?></td>
                                                 <td><?php echo $row['adresse'] ?></td>
                                                 <td>
-                                                    <a class="btn btn-danger" onclick="supprimerFornisseur(<?php echo $row['id'] ?>)"><i class="fa fa-trash-can fa-pull-left"></i></a>
-                                                    <a href="#" class="btn btn-warning"><i class="fa fa-pen-to-square fa-pull-right"></i></a>
+                                                    <a href="add_fornisseur.php?id=<?= $row['id'] ?>" title="Modifier" class="btn btn-warning"><i class="fa fa-pen-to-square"></i></a>
+                                                    <a class="btn btn-danger" title="Supprimer" onclick="supprimerFornisseur(<?php echo $row['id'] ?>)"><i class="fa fa-trash-can"></i></a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="transaction_fornisseur.php?id=<?= $row['id'] ?>" class="btn btn-primary"><i class="fa-solid fa-arrow-right-arrow-left"></i></a>

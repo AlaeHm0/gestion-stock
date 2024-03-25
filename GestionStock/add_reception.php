@@ -41,7 +41,7 @@ if(!isset($_SESSION['id'])){
         <!-- Heaader and Navigation -->
         <?php require('header.php'); ?>
         <!-- Content Page  -->
-        <div class="right_col">
+        <div class="right_col" role="main">
             <div>
                 <div class="page-title">
                     <div class="title_left">
@@ -71,6 +71,7 @@ if(!isset($_SESSION['id'])){
                                     <tbody>
                                         <tr>
                                             <td>
+                                                <input type="hidden" value="" id="id">
                                                 <select id="code_produit" class="form-select" onchange="changeCode(this.value)">
                                                     <option value=""></option>
                                                     <?php
@@ -100,8 +101,8 @@ if(!isset($_SESSION['id'])){
                                                 <td><?php echo $row['categorie'] ?></td>
                                                 <td><?php echo $row['quantite'] ?></td>
                                                 <td class="text-center">
-                                                    <a title="Supprimer" class="btn btn-danger" onclick="supprimerSelectReception(<?php echo $row['id'] ?>)"><i class="fa fa-trash-can fa-pull-left"></i></a>
-                                                    <a title="Editer" class="btn btn-warning"><i class="fa fa-pen-to-square fa-pull-right"></i></a>
+                                                    <a title="Editer" class="btn btn-warning" onclick="editerReception(<?= $row['id'] ?>)" ><i class="fa fa-pen-to-square "></i></a>
+                                                    <a title="Supprimer" class="btn btn-danger" onclick="supprimerSelectReception(<?php echo $row['id'] ?>)"><i class="fa fa-trash-can "></i></a>
                                                 </td>
                                             </tr>
                                             <?php
@@ -208,11 +209,13 @@ if(!isset($_SESSION['id'])){
         function ajouterReception(){
             let code_produit = $("#code_produit").val()
             let qte = $("#qte").val()
+            let id = $("#id").val()
             if(code_produit && qte > 0){
                 $.ajax({
                     url : "request/ajouter_reception.php",
                     method : 'post',
                     data : {
+                        id : id,
                         produit : code_produit,
                         qte : qte,
                         user : <?php echo $_SESSION['id'] ?>,
@@ -248,7 +251,9 @@ if(!isset($_SESSION['id'])){
                     let data = JSON.parse(reponse)
                     $("#nom_produit").text(data.nom);
                     $("#categorie").text(data.categorie);
-                    $("#qte").val(0) // reset the quantite
+                    if ($("#id").val() == ''){
+                        $("#qte").val(0) // reset the quantite
+                    }
                 }
             })
             }
@@ -335,6 +340,26 @@ if(!isset($_SESSION['id'])){
                 alert("Entrer tout les champs!")
             }
         }
+        function editerReception(id){
+        $.ajax({
+            url : 'request/editer_reception.php',
+            method : 'GET',
+            data : {
+                id : id
+            },
+            cach : false,
+            success : function(reponse){
+                let data = JSON.parse(reponse);
+                $("#code_produit").val(data.produit).prop('disabled', true);
+                $("#id").val(id);
+                changeCode(data.produit);
+                $("#qte").val(data.quantite);
+            },
+            error : function(xhr, status, error){
+                console.error(status + " : " + error)
+            }
+        })
+    }
     </script>
   </body>
 </html>
