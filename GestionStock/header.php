@@ -2,7 +2,7 @@
 <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.php" class="site_title"><i class="fa fa-university"></i> <span>ENAR-ERP</span></a>
+              <a href="dashboard.php" class="site_title"><i class="fa fa-university"></i> <span>ENAR-ERP</span></a>
             </div>
             <div class="clearfix"></div>
             <div class="profile clearfix">
@@ -23,9 +23,6 @@
                     </li>
                     <li>
                       <a href="categories.php"><i class="fa fa-table-list"></i>Categorie</a>
-                    </li>
-                    <li>
-                      <a href="users.php"><i class="fa fa-circle-user"></i>Utilisateurs</a>
                     </li>
                     <li>
                       <a href="emplacements.php"><i class="fa fa-building"></i>Emplacements</a>
@@ -83,17 +80,17 @@
 
             <!-- /menu footer buttons -->
             <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="profile">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+              <a data-toggle="tooltip" data-placement="top" title="profile" href="profile.php">
+                <span class="fa fa-user" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="message">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              <a data-toggle="tooltip" data-placement="top" title="paramettre" href="paramettre.php">
+                <span class="fa fa-sliders" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="paramettre">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              <a data-toggle="tooltip" data-placement="top" title="aide" href="aide.php">
+                <span class="fa fa-circle-question" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="logout.php">
+                <span class="fa fa-sign-out" aria-hidden="true"></span>
               </a>
             </div>
             <!-- /menu footer buttons -->
@@ -113,11 +110,11 @@
                         <img src="images/img.jpg" alt=""><?php echo $_SESSION['login'] ?>
                       </a>
                       <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropDown">
-                        <a href="#" class="dropdown-item"><i class="fa-regular fa-user fa-pull-right"></i> Profile</a>
-                        <a href="#" class="dropdown-item">
+                        <a href="profile.php" class="dropdown-item"><i class="fa-regular fa-user fa-pull-right"></i> Profile</a>
+                        <a href="paramettre.php" class="dropdown-item">
                           <i class="fa fa-sliders fa-pull-right"></i> Paramettre
                         </a>
-                        <a href="#" class="dropdown-item"><i class="fa-regular fa-circle-question fa-pull-right"></i> Aide</a>
+                        <a href="aide.php" class="dropdown-item"><i class="fa-regular fa-circle-question fa-pull-right"></i> Aide</a>
                         <a href="logout.php" class="dropdown-item">
                           
                           <i class="fa fa-sign-out fa-pull-right"></i>Deconnecter
@@ -128,34 +125,37 @@
                     <li class="nav-item dropdown open" role="presentation">
                       <a class="dropdown-toggle info-number" id="navbarDropDown1" data-toggle="dropdown">
                         <i class="fa-regular fa-bell"></i>
-                        <span class="badge bg-red">
-                          2
-                        </span>
+                          <?php 
+                          $result = mysqli_query($conn, "SELECT COUNT(*) as nbr_produits FROM stock WHERE quantite < 10");
+                          $row = mysqli_fetch_assoc($result);
+                          if($row['nbr_produits'] > 0){
+                            echo "<span class='badge bg-red'>". $row['nbr_produits'] ."</span>";
+                          }
+                          ?>
+                        
                       </a>
                       <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledly="navbarDropDown1">
-                        
+                        <?php
+                        $result = mysqli_query($conn, "SELECT COUNT(*) as nbr_produits FROM stock WHERE quantite < 10");
+                        $row = mysqli_fetch_assoc($result);
+                        if($row['nbr_produits'] > 0){
+                          ?>
                           <li class="nav-item">
-                            <a class="dropdown-item">
-                              <span class="image">
-                                <img src="images/img.jpg" alt="">
-                              </span>
-                              <span>
-                                <span>User</span>
-                                <span class="time">
-                                  10min
-                                </span>
-                              </span>
-                              <span class="message">un Stock est infussant!</span>
-                            </a>
+                            <div class="dropdown-item">
+                              <?= $row['nbr_produits'] ?> produit dans le stock de quantite inferieur a 10
+                            </div>
                           </li>
                         <li class="nav-item">
                           <div class="text-center">
-                            <a href="#" class="dropdown-item">
-                              <strong>Afficher tout les alerts</strong>
+                            <a href="stock.php" class="dropdown-item">
+                              <strong>Afficher tout les produits</strong>
                               <i class="fa fa-angle-right"></i>
                             </a>
                           </div>
                         </li>
+                          <?php
+                        }
+                        ?>
                       </ul>
                     </li>
                   </ul>

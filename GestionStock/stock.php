@@ -78,7 +78,15 @@ if(!isset($_SESSION['id'])){
                                                 <td><?= $row['code_produit'] ?></td>
                                                 <td><?= $row['nom_produit'] ?></td>
                                                 <td><?= $row['categorie'] ?></td>
-                                                <td><?= $row['quantite'] ?></td>
+                                                <td><?php 
+                                                    if($row['quantite'] >= 20){
+                                                        echo "<span class='bg-success text-white p-2 rounded'>".$row['quantite']."</span>";
+                                                    }else if($row['quantite'] >= 10 ){
+                                                        echo "<span class='bg-warning  p-2 rounded'>".$row['quantite']."</span>";
+                                                    }else{
+                                                        echo "<span class='bg-danger text-white p-2 rounded'>".$row['quantite']."</span>";
+                                                    }
+                                                ?></td>
                                                 <td><?= $row['emplacement'] ?></td>
                                             </tr>
                                             <?php

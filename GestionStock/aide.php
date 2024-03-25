@@ -27,7 +27,7 @@ if(!isset($_SESSION['id'])){
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
     <!-- Build -->
     <link rel="stylesheet" href="../build/css/custom.min.css" >
-    <title>Detail Expedition</title>
+    <title>Aide</title>
 </head>
 
   <body class="nav-md">
@@ -40,52 +40,64 @@ if(!isset($_SESSION['id'])){
             <div>
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>Details de Expedition</h3>
+                        <h3>Aide - Gestion de Stock</h3>
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <div class="x_content">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="card-box table-responsive">
-                                <table class="table table-striped table-bordered" id="datatable-buttons">
-                                    <thead class="table-info">
-                                        <tr>
-                                            <th>Id Facture</th>
-                                            <th>Client</th>
-                                            <th>Date Livraison</th>
-                                            <th>Quantite Total</th>
-                                            <th>Bon de Livraison</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $result = mysqli_query($conn, "SELECT rc.facture as id ,fr.nom as client,
-                                        em.nom as emplacement,
-                                        rc.date_livraison as date_livraison,
-                                        sum(rc.quantite) as quantite_total
-                                        FROM sortie rc
-                                        JOIN client fr ON fr.id = rc.client
-                                        JOIN emplacement em ON em.id = rc.emplacement
-                                        GROUP BY facture");
-                                        while($row = mysqli_fetch_array($result)){
-                                            ?>
-                                            <tr>
-                                                <td><?= $row['id'] ?></td>
-                                                <td><?= $row['client'] ?></td>
-                                                <td><?= $row['date_livraison'] ?></td>
-                                                <td><?= $row['quantite_total'] ?></td>
-                                                <td class="text-center"><a href="#" class="btn btn-warning"><i class="fa fa-print"></i></a></td>
-                                            </tr>
-                                            <?php
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
+    <div class="x_content">
+        
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Vue d'ensemble de l'application</h2>
+                <p class="card-text">Notre application de gestion de stock vous permet de gérer efficacement les stocks de votre entreprise. Voici quelques-unes des fonctionnalités clés :</p>
+                <ul>
+                    <li>Gestion des produits</li>
+                    <li>Gestion des fournisseurs</li>
+                    <li>Gestion des Clients</li>
+                    <li>Gestion des Entree / Sortie</li>
+                    <li>Gestion des stocks</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h2 class="card-title">Comment Utiliser l'Application</h2>
+
+                <h5 class="mt-3">Ajouter un Produit</h5>
+                <ol>
+                    <li>Cliquez sur l'onglet "Produits" dans le menu principal.</li>
+                    <li>Sélectionnez "Ajouter un Produit".</li>
+                    <li>Remplissez les détails du produit tels que le nom, la description et la categorie.</li>
+                    <li>Cliquez sur "Enregistrer" pour ajouter le produit à votre inventaire.</li>
+                </ol>
+
+                <h5 class="mt-3">Passer une Reception</h5>
+                <ol>
+                    <li>Accédez à l'onglet "Receptions" dans le menu principal.</li>
+                    <li>Cliquez sur "Ajouter BR".</li>
+                    <li>Sélectionnez le fournisseur et les produits à commander.</li>
+                    <li>Spécifiez les quantités et les détails de livraison.</li>
+                    <li>Validez la commande en cliquant sur "Confirmer Reception".</li>
+                </ol>
+
+                <h5 class="mt-3">Passer une Expedition</h5>
+                <ol>
+                    <li>Accédez à l'onglet "Expreditions" dans le menu principal.</li>
+                    <li>Cliquez sur "Ajouter BL".</li>
+                    <li>Sélectionnez le Client et les produits à commander.</li>
+                    <li>Spécifiez les quantités et les détails de livraison.</li>
+                    <li>Validez la commande en cliquant sur "Confirmer Expredition".</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="alert alert-info mt-4" role="alert">
+            <strong>Besoin d'Aide Supplémentaire?</strong> Si vous rencontrez des problèmes techniques, des erreurs ou si vous avez des questions spécifiques sur l'utilisation de l'application, n'hésitez pas à contacter notre équipe d'assistance technique. Nous sommes là pour vous aider à tirer le meilleur parti de notre application de gestion de stock.
+        </div>
+    </div>
+
             </div>
         </div>
         <!-- /footer content -->

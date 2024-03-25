@@ -119,6 +119,7 @@ if(!isset($_SESSION['id'])){
                           <tbody>
                             <?php 
                             $result = mysqli_query($conn, "SELECT  # Creer un query pour selecter les transaction les plus recent
+                            subfacture.id as id,
                             cl.nom as client,                      # a partir des factures 
                             pr.nom as produit,
                             sr.quantite as quantite,
@@ -131,7 +132,7 @@ if(!isset($_SESSION['id'])){
                             JOIN produit pr ON pr.id = sr.produit
                             JOIN client cl ON cl.id = sr.client
                             UNION  # combiner les deux tables reception et sortie
-                            SELECT 
+                            SELECT subfacture.id as id,
                             fr.nom as fornisseur,
                             pr.nom as produit,
                             rc.quantite as quantite,
@@ -143,7 +144,8 @@ if(!isset($_SESSION['id'])){
                             ON subfacture.id = rc.facture
                             JOIN produit pr ON pr.id = rc.produit
                             JOIN fornisseur fr ON fr.id = rc.fornisseur
-                            WHERE statut = 'associe'");
+                            WHERE statut = 'associe'
+                            ORDER BY id DESC");
                             while($row = mysqli_fetch_array($result)){
                               ?>
                               <tr>
@@ -174,7 +176,7 @@ if(!isset($_SESSION['id'])){
     </div>
 
      <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+     <script src="../vendors/jquery/dist/jquery.min.js"></script>
     <!-- DataTables -->
     <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
@@ -218,6 +220,17 @@ if(!isset($_SESSION['id'])){
       }
       ?>
       const ctx = $("#vente_chart");
+      const onHover = function handleHover(evt, item, legend) {
+                              legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+                                colors[index] = index === item.index || color.length === 9 ? color : color + '4D';
+                              });
+                              legend.chart.update();}
+      const onLeave = function handleLeave(evt, item, legend) {
+                              legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+                                colors[index] = color.length === 9 ? color.slice(0, -2) : color;
+                              });
+                              legend.chart.update();
+                            }
         const barColors = ["#023e8a", "#0077b6","#0096c7", "#00b4d8", "#48cae4"];
         new Chart(ctx, {
             type : 'doughnut',
@@ -230,6 +243,14 @@ if(!isset($_SESSION['id'])){
                     backgroundColor : barColors
                 }]
             },
+            options : {
+              plugins : {
+                legend : {
+                  onHover : onHover,
+                  onLeave : onLeave
+                }
+              }
+            }
             
         })
         <?php
@@ -261,6 +282,14 @@ if(!isset($_SESSION['id'])){
                     backgroundColor : barColors
                 }]
             },
+            options : {
+              plugins : {
+                legend : {
+                  onHover : onHover,
+                  onLeave : onLeave
+                }
+              }
+            }
         })
     </script>
   </body>
