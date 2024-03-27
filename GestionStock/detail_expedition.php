@@ -75,7 +75,7 @@ if(!isset($_SESSION['id'])){
                                                 <td><?= $row['client'] ?></td>
                                                 <td><?= $row['date_livraison'] ?></td>
                                                 <td><?= $row['quantite_total'] ?></td>
-                                                <td class="text-center"><a href="#" class="btn btn-warning"><i class="fa fa-print"></i></a></td>
+                                                <td class="text-center"><a href="bon_expedition.php?id=<?= $row['id'] ?>" class="btn btn-warning"><i class="fa fa-print"></i></a></td>
                                             </tr>
                                             <?php
                                         }

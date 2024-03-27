@@ -29,6 +29,7 @@ include 'backend/database.php';
         .card{
             width : 500px;
             max-width : 80%;
+            margin-bottom : 30px;
         }
         
         img{
@@ -48,13 +49,17 @@ include 'backend/database.php';
                 <h1 class="card-title text-center">Registre</h1>
                 <form action="signin_process.php" method="POST">
                     <label for="nom">Nom</label>
-                    <input type="text" class="form-control" name="nom">
+                    <input type="text" class="form-control" name="nom" required>
                     <label for="login">Login</label>
-                    <input type="text" class="form-control" name="login">
+                    <input type="text" class="form-control" name="login" required>
                     <label for="mp">Motepass</label>
-                    <input type="password" name="pw" class="form-control">
+                    <input type="password" name="pw" class="form-control" required>
                     <label for="role">Role</label>
                     <input type="text" name="role" class="form-control">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" class="form-control">
+                    <label for="phone">Telephone</label>
+                    <input type="tel" name="phone" class="form-control">
                     <input type="submit" class="btn btn-info mt-2" value="Registre">
                     <p class="text-center">Deja avoire un compte? <a href="login.php">Log in ici</a></p>
                 </form>

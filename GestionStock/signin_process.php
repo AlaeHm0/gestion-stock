@@ -6,12 +6,17 @@ $nom = $_POST['nom'];
 $login = $_POST['login'];
 $pw = $_POST['pw'];
 $role = $_POST['role'];
-
-$sql = "INSERT INTO user (nom, login, motpass, role) VALUES ('$nom', '$login', '$pw', '$role')";
+$email = $_POST['email'];
+$phone = $_POST['phone'];
+$sql = "INSERT INTO user (nom, login, motpass, role, email, phone) VALUES ('$nom', '$login', '$pw', '$role', '$email', '$phone')";
 $result = mysqli_query($conn, $sql);
     if($result){
+        $result = mysqli_query($conn , "SELECT LAST_INSERT_ID() as id FROM USER");
+        $row = mysqli_fetch_assoc($result);
+        $_SESSION['id'] = $row['id'];
         $_SESSION['login'] = $login;
-        header("Location: categories.php");
+        $_SESSION['nom'] = $nom;
+        header("Location: dashboard.php");
     }else{
         echo "Error : " . mysqli_error($conn);
     }
