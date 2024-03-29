@@ -31,7 +31,8 @@ function Footer(){
     $this->Cell(180,5,'Site Web : www.dgm2s.com',0,0,'C',true);
 }
 function Info_societe_client($row_forn) {
-    
+    $this->SetDrawColor(0,0,153);
+    $this->SetTextColor(0,0,153);
     $this->SetFont('Arial','B',12);
     $this->Cell(30, 10, "WEB", 1, 0,'C');
     $this->SetFont('Arial', '', 12);
@@ -47,9 +48,9 @@ function Info_societe_client($row_forn) {
     $this->SetFont('Arial', '', 10);
     $this->Cell(60, 10, "Lot Feth Abi RegRag N35 Temara", 1, 0);
     $this->Cell(10);
-    $this->SetFont('Arial','B',10);
+    $this->SetFont('Arial','B',12);
     $this->Cell(30, 10, "Adresse", 1, 0,'C');
-    $this->SetFont('Arial', '', 12);
+    $this->SetFont('Arial', '', 10);
     $this->Cell(60, 10, $row_forn['adresse'], 1, 1);
     //
     $this->SetFont('Arial','B',12);
@@ -97,9 +98,12 @@ function Signature(){
     $this->Image('images/signature.png',95,220,95);
 }
 function main_table($result){
+    $this->SetDrawColor(0,0,0);
+    $this->SetTextColor(0,0,0);
     $this->SetFont('Arial','B',12);
+    $this->Cell(10,10,'Num',1,0,'C');
     $this->Cell(30,10,'Code',1,0,'C');
-    $this->Cell(100,10,'Nom',1,0,'C');
+    $this->Cell(90,10,'Nom',1,0,'C');
     $this->Cell(30,10,'Categorie',1,0,'C');
     $this->Cell(30,10,'Quantite',1,1,'C');
     $counter = 0;
@@ -107,8 +111,9 @@ function main_table($result){
     $this->SetFont('Arial','',12);
     while($row = mysqli_fetch_assoc($result)){
         $counter += 1;
+        $this->Cell(10,10,$counter,1,0,'C');
         $this->Cell(30,10,$row['code'],1,0,'C');
-        $this->Cell(100,10,$row['nom'],1,0,'C');
+        $this->Cell(90,10,$row['nom'],1,0,'C');
         $this->Cell(30,10,$row['categorie'],1,0,'C');
         $this->Cell(30,10,$row['quantite'],1,1,'C');
         $qte_total += $row['quantite'];
@@ -137,11 +142,12 @@ $result = mysqli_query($conn, "SELECT
 pr.code as code,
 pr.nom as nom,
 ct.nom as categorie,
-rc.quantite as quantite
+SUM(rc.quantite) as quantite
 FROM sortie rc
 JOIN produit pr ON pr.id = rc.produit
 JOIN categorie ct ON ct.id = pr.categorie
-WHERE rc.facture = '$id'");
+WHERE rc.facture = '$id'
+GROUP BY rc.produit");
 
 $pdf->main_table($result);
 

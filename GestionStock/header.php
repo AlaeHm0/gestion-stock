@@ -68,10 +68,7 @@
                       </ul>
                     </li>
                     <li>
-                      <a href="#"><i class="fa fa-landmark"></i>Societe</a>
-                    </li>
-                    <li>
-                      <a href="#"><i class="fa fa-chart-column"></i>Rapport</a>
+                      <a href="rapport.php"><i class="fa fa-chart-column"></i>Rapport</a>
                     </li>
                   </ul>
                 </div>
